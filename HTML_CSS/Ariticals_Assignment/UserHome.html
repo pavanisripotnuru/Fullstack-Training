@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="Style.css">
+</head>
+
+<body style="background-color:blue;">
+    <!--<form id="create-account-form" name="LoginForm" action="login.html" method="GET">
+
+        <button type="Logout" class="btn" value="" onclick="logout(event)">Logout</button>    </form>-->
+        <div class="action">
+            <div class="profile" onclick="menuToggle()"> 
+                <img class="avtar" src="/home/pavani/Documents/HTML-Practice/images/nature.jpeg">
+            </div>
+            <div class="menu">
+                <h3>Welcome Pavani</h3><br><span></span>
+                <ul>
+                    <li><img src="/home/pavani/Documents/HTML-Practice/images/user.png"><a href="#">My Profile</a></li>
+                    <li><img src="/home/pavani/Documents/HTML-Practice/images/edit.png"><a href="#">Edit Profile</a></li>
+                    <li><img src="/home/pavani/Documents/HTML-Practice/images/inbox.png"><a href="#">Inbox</a></li>
+                    <li><img src="/home/pavani/Documents/HTML-Practice/images/settings.png"><a href="#">Settings</a></li>
+                    <li><img src="/home/pavani/Documents/HTML-Practice/images/help.png"><a href="#">Help</a></li>
+                    <li><img src="/home/pavani/Documents/HTML-Practice/images/logout.png"><a href="login.html">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    <div class="header">
+        <h2 id="name" style="color:red"></h2>
+
+
+    </div>
+
+
+    <div class="row">
+
+
+        <div class="container">
+
+            <div class="image">
+                <img src="/home/pavani/Documents/HTML-Practice/images/avg.jpeg">
+            </div>
+            <div class="text">
+                <h2>Avangers</h2>
+                <p> Release date April 11, 2012 </p>
+                <p>The Avengers, is a 2012 American superhero film based on the Marvel Comics superhero team of the same
+                    name.
+                    Produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures,[N 1] it is the
+                    sixth film in the Marvel</p>
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="image">
+                <img src="/home/pavani/Documents/HTML-Practice/images/panter.jpg">
+            </div>
+            <div class="text">
+                <h2>Black Panter</h2>
+                <p> Release date January 29, 2018 </p>
+                <p>Black Panther is a 2018 American superhero film based on the Marvel Comics character
+                    of the same name. Produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures
+                    it is the 18th film in the Marvel .</p>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <div class="image">
+                <img src="/home/pavani/Documents/HTML-Practice/images/spid.jpg">
+            </div>
+            <div class="text">
+                <h2>Spider Man</h2>
+                <p>Release date June 28, 2017 </p>
+                <p>Spider-Man: Homecoming is a 2017 American superhero film based on the Marvel Comics character
+                    co-produced by Columbia Pictures and Marvel Studios, and distributed by
+                    writing teams of Jonathan Goldstein and John Francis Daley, Watts and Sommers.</p>
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="image">
+                <img src="/home/pavani/Documents/HTML-Practice/images/doc.jpg">
+            </div>
+            <div class="text">
+                <h2>Doctor Strange</h2>
+                <p>Release date October 13, 2016 </p>
+                <p>Doctor Strange is a 2016 American superhero film based on the Marvel Comics character of the same
+                    name Produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures, it is the
+                    14th film.</p>
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="image">
+                <img src="/home/pavani/Documents/HTML-Practice/images/cap.jpg">
+            </div>
+            <div class="text">
+                <h2>Captain Marvel</h2>
+                <p>Release date February 27, 2019 </p>
+                <p>Captain Marvel is a 2019 American superhero film based on Marvel Comics featuring the character Carol
+                    Danvers / Captain Marvel.
+                    Produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures, it is the 21st
+                    film .</p>
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="image">
+                <img src="/home/pavani/Documents/HTML-Practice/images/black.jpg">
+            </div>
+            <div class="text">
+                <h2>Black Widow</h2>
+                <p> Release date June 29, 2021</p>
+                <p>Black Widow is a 2021 American superhero film based on Marvel Comics featuring the
+                    character of the same name. Produced by Marvel Studios and distributed by Walt Disney
+                    Studios Motion Pictures, it is the 24th film .</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        var newURL = location.href.split("?")[0];
+        window.history.pushState('object', document.title, newURL);
+        var user = localStorage.getItem('name');
+        var email = localStorage.getItem('email');
+        document.getElementById('name').innerHTML = 'Hello <i>' + user + '</i><br> Login Id: ' + email;
+
+        function logout(event) {
+            localStorage.removeItem('name')
+            localStorage.removeItem('email')
+        }
+
+        function menuToggle() {
+            const toggleMenu = document.querySelector('.menu');
+            toggleMenu.classList.toggle('active');
+        }
+
+    </script>
+
+</body>
+
+</html>
