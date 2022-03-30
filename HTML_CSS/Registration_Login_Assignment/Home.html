@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>,
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIN FORM</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+</head>
+<body>
+
+    <form id="create-account-form" name="LoginForm" action="login.html" method="GET">
+
+    <h1 id="msg"></h1>
+    <button type="Logout" class="btn" value="" onclick="logout(event)">Logout</button>
+    </form>
+
+</body>
+
+<script>
+    var user = localStorage.getItem('name');
+    document.getElementById('msg').innerHTML = 'Hello,' + user;
+
+    function logout(event) {
+        localStorage.removeItem('name')
+    }
+
+</script>
+</html>
