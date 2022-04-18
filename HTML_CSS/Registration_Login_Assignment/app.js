@@ -1,10 +1,12 @@
 const form = document.querySelector('#create-account-form');
 const usernameInput = document.querySelector('#username');
+const lastnameInput = document.querySelector('#lastname')
 const emailInput = document.querySelector('#email');
 const passwordInput = document.querySelector('#password');
 const confirmPasswordInput = document.querySelector('#confirm-password');
 const ageInput = document.querySelector('#age');
 var gen = document.registerForm.gender;
+let userObj = {};
 
 
 function validate(event) {
@@ -14,10 +16,66 @@ function validate(event) {
         console.log("Form is valid");
         console.log(usernameInput.value);
         addUserFormToLocalStorage(event);
+        console.log("Local storage task is completed")
+        saveUser();
+       
     } else {
         event.preventDefault();
     }
 }
+
+function saveUser() {
+    console.log("calling api")
+    const data = JSON.stringify(userObj);
+    console.log(userObj)
+    console.log(data)
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+             alert(this.responseText);
+         }
+    };
+    xhttp.open("POST", "http://localhost:3000/register/user", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(data);
+}
+
+
+/*async function apiCall() {
+    console.log("calling api")
+    const data = JSON.stringify(usersData);
+    console.log(usersData)
+    const response = await fetch('http://localhost:3000/register/user', {
+      method: 'POST',
+      body: data, // string or object
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept' : 'application/json',
+        'mode' : 'no-cors'
+        //'Access-Control-Allow-Origin' : 'http://localhost:3000',
+       // 'Access-Control-Allow-Methods' : 'GET, POST, OPTIONS, PUT'
+
+
+      }
+    });
+    const myJson = await response.json(); //extract JSON from the http response
+    // do something with myJson
+    console.log("completed calling api") 
+}*/
+const userAction = async () => {
+    console.log("calling api")
+    const response = await fetch('http://localhost:3000/register/user', {
+      method: 'POST',
+      body: data, // string or object
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const myJson = await response.json(); //extract JSON from the http response
+    // do something with myJson
+    console.log("completed calling api")
+
+  }
 
 
 function isFormValid() {
@@ -70,12 +128,24 @@ function pushUser(data) {
     console.log(document.registerForm.gender.value);
     data.push({
         name: usernameInput.value,
+        last_name:lastnameInput.value,
         email: emailInput.value,
         password: passwordInput.value,
-        age: ageInput.value,
-        gender:document.registerForm.gender.value
+        confirm_password: passwordInput.value,
+        gender:document.registerForm.gender.value,
+        age: ageInput.value
+
     });
     localStorage.setItem('User', JSON.stringify(data));
+     userObj = {
+        'name': usernameInput.value,
+        'last_name':lastnameInput.value,
+        'email': emailInput.value,
+        'password': passwordInput.value,
+        'confirm_password': passwordInput.value,
+        'gender':document.registerForm.gender.value,
+        'age': ageInput.value
+    }
     //Form Reset code
      document.querySelector("#create-account-form").reset();
      const inputContainers = form.querySelectorAll('.input-group');

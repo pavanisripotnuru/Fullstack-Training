@@ -2,17 +2,21 @@ const emailInput = document.querySelector('#email');
 const passwordInput = document.querySelector('#password');
 const fail = document.querySelector('#failuer');
 const form = document.querySelector('#create-account-form');
+let loginObj = {};
+let result= {}
 
 function login(event) {
-
-    
     validateForm();
     let usersData = new Array();
     usersData = JSON.parse(localStorage.getItem('User'));
 
     if (isValidUser(usersData) == true) {
-        console.log("Login Sucees");
+        console.log("Login Sucees in local storage");
+        console.log("Checking in DB using rest api")
+        getDataFromDb();
+     
        // window.location.href = 'UserHome.html';
+
     }
    else {
         if (isValidForm() == true) {
@@ -22,6 +26,31 @@ function login(event) {
 
     }
 
+}
+
+function getDataFromDb() {
+    loginObj = {
+        "email" : emailInput.value,
+        "password" : passwordInput.value
+
+    }
+    const data = JSON.stringify(loginObj);
+    console.log(data)
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+             alert(this.responseText);
+             result= JSON.parse(this.responseText);
+             console.log(result[0].name)
+             console.log(result[0].email)
+             if(result[0].email == emailInput.value && result[0].password==passwordInput.value) {
+                alert("!!!!Login success from DB!!!!")
+            }
+         }
+    };
+    xhttp.open("POST", "http://localhost:3000/login/user", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(data);
 }
 
 function isValidForm() {

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="Style.css">
+</head>
+
+<body>
+
+        <div class="action">
+            <div class="profile" onclick="menuToggle()"> 
+                <img class="avtar" src="/home/pavani/Documents/HTML-Practice/images/myprofile.jpeg">
+            </div>
+            <div class="menu">
+                <h3>Welcome</h3><br><span>Pavani</span>
+                <ul>
+                    <li><img src="/home/pavani/Documents/HTML-Practice/images/user.png"><a href="#">My Profile</a></li>
+                    <li><img src="/home/pavani/Documents/HTML-Practice/images/edit.png"><a href="#">Edit Profile</a></li>
+                    <li><img src="/home/pavani/Documents/HTML-Practice/images/inbox.png"><a href="#">Inbox</a></li>
+                    <li><img src="/home/pavani/Documents/HTML-Practice/images/settings.png"><a href="#">Settings</a></li>
+                    <li><img src="/home/pavani/Documents/HTML-Practice/images/help.png"><a href="#">Help</a></li>
+                    <li><img src="/home/pavani/Documents/HTML-Practice/images/logout.png"><a href="#">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+        <script>
+            
+            function menuToggle() {
+                const toggleMenu = document.querySelector('.menu');
+                toggleMenu.classList.toggle('active');
+            }
+    
+        </script>
+</body>
+</html>
