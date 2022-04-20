@@ -7,6 +7,11 @@ const port = 3000
 const request = require('request');
 var multer = require('multer');
 var upload = multer();
+var jwt = require('jsonwebtoken');
+const jwt_decode=require('jwt-decode');
+require('dotenv').config();
+const { checkToken } =require('./tokenValidation');
+
 
 const cors=require("cors");
 const corsOptions ={
@@ -41,7 +46,9 @@ app.use(
 app.get('/', (request, response) => {
   response.json({ info: 'Node.js, Express, and Postgres API' })
 })
-
+const secret_key = 'Saltkey@2022';
+const token = jwt.sign({id:'123456'}, secret_key);
+console.log(token)
 //app.get('/users', db.getUsers)
 //app.get('/users/:id', db.getUserById)
 //app.post('/users', db.createUser)
@@ -54,7 +61,7 @@ app.post('/users', db.createUser)
 app.put('/users/:id', db.updateUser)
 app.delete('/users/:id', db. deleteUser)
 app.get('/users/age/:id', db.getUserByAge)
-app.get('/users/movienames/:id', db.getMovieNamesByUserId)
+app.get('/users/movienames/:id', checkToken, db.getMovieNamesByUserId)
 app.get('/users/usernames/:id', db.getUserNamesByMovieId)
 
 app.get('/movies', dbs.getMovies)

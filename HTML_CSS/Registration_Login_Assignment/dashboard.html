@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dashboard</title>
+    <meta charset="UTF-8">
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* background-color: YellowGreen;*/
+            
+            background-color: YellowGreen;
+        }
+
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+        .movies{
+           
+        }
+
+        .btn {
+            padding: 10px;
+            font-size: 20px;
+            background-color: chocolate;
+            color: #fff;
+            text-transform: uppercase;
+            border: none;
+        }
+    </style>
+
+    <script>
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        const userId = params.userId;
+        //alert(userId)
+        const email = localStorage.getItem("email");
+        const token = localStorage.getItem("token");
+        console.log(email)
+        console.log(token)
+        var baseURL = "http://localhost:3000/users/movienames"
+        function loadMoviesByUserId() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET", baseURL + "/" + userId, true)
+            // xhttp.open("GET", baseURL, true)
+
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var movies = JSON.parse(xhttp.responseText);
+                    if(movies.length===0) {
+                        document.getElementById("hello").innerHTML = "Welcome " + email;
+                        document.getElementById("moviesinfo").innerHTML = "<h2>No movies associated with you!!!!</h2>";
+
+                    }else {
+                    var tableHeader = `<table id="movieTable"<tr><th>Id</th><th>Movie Name</th></tr>`
+                    var main = "";
+                    for (i = 0; i < movies.length; i++) {
+                        main += "<tr><td>" + movies[i].movie_id + "</td><td>" + movies[i].movie_name + "</td></tr>";
+                    }
+                    var tableBottom = "</table>";
+                    var tbl = tableHeader + main + tableBottom;
+                    document.getElementById("moviesinfo").innerHTML = tbl;
+                    document.getElementById("hello").innerHTML = "Welcome " + email;
+                }
+            }
+            };
+            xhttp.setRequestHeader("Authorization", "Bearer "+token);
+            xhttp.send();
+        }
+        window.onload = function () {
+            loadMoviesByUserId();
+        }
+
+        function logout(event) {
+            localStorage.removeItem('email')
+            localStorage.removeItem('token')
+            window.location.href = "login.html";
+        }
+
+
+    </script>
+</head>
+
+<body>
+    <h1 id="hello"></h1>
+    <div id="moviesinfo" class="movies"></div><br/>
+    <button type="Logout" class="btn" value="" onclick="logout(event)">Logout</button>
+
+</body>
+
+</html>

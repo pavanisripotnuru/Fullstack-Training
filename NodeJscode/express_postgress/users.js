@@ -1,5 +1,12 @@
 const { response } = require('express')
 const { getConnection } = require('./connection')
+const bcrypt = require("bcrypt");
+var jwt = require('jsonwebtoken');
+const jwt_decode=require('jwt-decode');
+//const secret_key = 'Saltkey@2022';
+//const act_token = jwt.sign({id:'123456'}, secret_key);
+const { sign } = require("jsonwebtoken");
+require('dotenv').config();
 
 const getUsers = (request, response) => {
   getConnection.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
@@ -96,22 +103,66 @@ const getUserNamesByMovieId = (request,response) => {
   })
 }
 
-const registerUser = (request,response) => {
+async function registerUser(request,response) {
   console.log("Register User Request called")
   const { name,last_name,email,password,confirm_password,gender,age } = request.body
   //console.log(request)
   console.log(request.body)
   console.log(request.body.gender)
 
-  getConnection.query('INSERT INTO reg_user (name,last_name,email,password,confirm_password,gender,age ) VALUES ($1,$2,$3,$4,$5,$6,$7)', [name,last_name,email,password,confirm_password,gender,age ], (error, results) => {
-    if (error) {
-      response.status(500).send(`something went wrong`)
-    }
+  hashedPassword = await bcrypt.hash(password, 10);
+  hashedConfirmedPassword = await bcrypt.hash(confirm_password, 10);
+  console.log(hashedPassword);
+  console.log(hashedConfirmedPassword);
 
-    response.status(200).send(`reg_user added with name ${name} is success`)
-  })
-  //response.status(200).json("success")
+  const result = await checkIsEmailExistsOrNot(request.body.email);
+  if(result) {
+    getConnection.query('INSERT INTO reg_user (name,last_name,email,password,confirm_password,gender,age ) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id, email', [name,last_name,email,hashedPassword,hashedConfirmedPassword,gender,age ], (error, results) => {
+      if (error) {
+        return response.status(500).send(`something went wrong`)  
+      }
+      console.log(results);
+      const jsontoken = sign({ result: results.rows }, process.env.JWT_KEY, {
+        expiresIn: "1h"
+      });
+      //return response.status(200).send(results.rows);
+      return response.status(200).json({
+        success: 1,
+        message: "User Added successfully",
+        token: jsontoken,
+        data:results.rows
+      });
+      //response.status(200).send(`reg_user added with name ${name} is success`)
+    })
+  } else {
+      console.log("Register "+false)
+      response.status(400).send(`User Email ${email} Already exists in the database`)
+    }
 }
+function checkIsEmailExistsOrNot(email) {
+  return new Promise((resolve, reject) => {
+    let result = false;
+    console.log("Checking is email inside method")
+  getConnection.query('select name from reg_user where email=$1', [email], (error,results) => {
+  if(error) {
+    return response.status(500).send(`unable to fectch the user of email ${email}`)
+  }
+  console.log(results.rowCount)
+  if(results.rowCount>=1) {
+    console.log(`User Email ${email} Already exists in the database`)
+   resolve(result);
+  }else {
+    console.log(`User Email ${email} not exists in the database`)
+    result= true;
+    resolve(result);
+  }
+  })
+});
+
+}
+
+
+
 
 const loginUser = (request,response) => {
   console.log("Login User Request called")
@@ -119,13 +170,59 @@ const loginUser = (request,response) => {
   //console.log(request)
   console.log(request.body)
   console.log(request.body.email)
+  /*const token = request.headers.authorization;
+  console.log("token"+token);
+  if(!token) {
+    return response.status(401).json('Unauthorize user')
+  }
+  let decoded_id='';
+  jwt.verify(token,secret_key,function(error, decoded) {
+    console.log(decoded)
+    if(decoded ===undefined) {
+      return response.status(401).json('Not valid user to access this resource')
 
-  getConnection.query('SELECT * from reg_user where email=$1 and password=$2', [email,password], (error, results) => {
+    }else{
+      console.log(decoded.id)
+    }
+    
+  });*/
+
+  getConnection.query('SELECT * from reg_user where email=$1', [email], (error, results) => {
     if (error) {
       throw error
     }
     console.log(results.rows)
-    response.status(200).send(results.rows)
+    if (results.rows.length > 0) {
+
+      const user = results.rows[0];
+      console.log(user)
+      bcrypt.compare(password, user.password, (err, isMatch) => {
+        if (err) {
+          console.log(err);
+          return response.status(404).send(`something went wrong`)
+
+        }
+        if (isMatch) {
+          const jsontoken = sign({ result: results }, process.env.JWT_KEY, {
+            expiresIn: "1h"
+          });
+          //return response.status(200).send(results.rows);
+          return response.status(200).json({
+            success: 1,
+            message: "login successfully",
+            token: jsontoken,
+            data:results.rows
+          });
+        }else {
+         return response.status(404).send(`No user exist with given password in the database`)
+
+        }
+
+      });
+    }else {
+      response.status(404).send(`No user exist with ${email} in the database`)
+
+    }
   })
   //response.status(200).json("success")
 }

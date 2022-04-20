@@ -7,6 +7,7 @@ const confirmPasswordInput = document.querySelector('#confirm-password');
 const ageInput = document.querySelector('#age');
 var gen = document.registerForm.gender;
 let userObj = {};
+let response = {};
 
 
 function validate(event) {
@@ -15,29 +16,70 @@ function validate(event) {
     if (isFormValid() == true) {
         console.log("Form is valid");
         console.log(usernameInput.value);
-        addUserFormToLocalStorage(event);
-        console.log("Local storage task is completed")
-        saveUser();
-       
+       // addUserFormToLocalStorage(event);
+       // console.log("Local storage task is completed")
+        saveUser(event)
+        event.preventDefault();
+          
+       // formReset();       
     } else {
         event.preventDefault();
     }
 }
 
-function saveUser() {
-    console.log("calling api")
+function saveUser(event) {
+   alert("calling api")
+    userObj = {
+        'name': usernameInput.value,
+        'last_name':lastnameInput.value,
+        'email': emailInput.value,
+        'password': passwordInput.value,
+        'confirm_password': passwordInput.value,
+        'gender':document.registerForm.gender.value,
+        'age': ageInput.value
+    }
     const data = JSON.stringify(userObj);
     console.log(userObj)
     console.log(data)
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
          if (this.readyState == 4 && this.status == 200) {
+            alert(this.status)
+            alert(this.responseText);
+            response= JSON.parse(this.responseText);
+            console.log(response.token)
+            console.log(response.data[0].id)
+           localStorage.setItem('email',emailInput.value);
+           localStorage.setItem('token', response.token)
+           console.log(localStorage.getItem("email"));
+               alert("Resgister Successfull")
+               userId=response.data[0].id;
+               var url="dashboard.html?userId="+userId;
+               window.location.href = url;
+            //formReset();  
+
+         }else if(this.readyState == 4 && this.status==400){
+             alert(this.status)
              alert(this.responseText);
+             setError(emailInput, 'Email is already exists in database use a differnt one');
+             event.preventDefault();
          }
     };
     xhttp.open("POST", "http://localhost:3000/register/user", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(data);
+
+}
+
+function formReset() {
+    document.querySelector("#create-account-form").reset();
+    const inputContainers = form.querySelectorAll('.input-group');
+    inputContainers.forEach((container) => {
+        if (container.classList.contains('success')) {
+            container.classList.remove('success');
+        }
+});
+
 }
 
 
@@ -61,7 +103,7 @@ function saveUser() {
     const myJson = await response.json(); //extract JSON from the http response
     // do something with myJson
     console.log("completed calling api") 
-}*/
+}
 const userAction = async () => {
     console.log("calling api")
     const response = await fetch('http://localhost:3000/register/user', {
@@ -75,7 +117,7 @@ const userAction = async () => {
     // do something with myJson
     console.log("completed calling api")
 
-  }
+  }*/
 
 
 function isFormValid() {
