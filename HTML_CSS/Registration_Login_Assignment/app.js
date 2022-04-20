@@ -51,10 +51,12 @@ function saveUser(event) {
             console.log(response.data[0].id)
            localStorage.setItem('email',emailInput.value);
            localStorage.setItem('token', response.token)
+           userId=response.data[0].id;
+           localStorage.setItem('userId', userId)
            console.log(localStorage.getItem("email"));
                alert("Resgister Successfull")
-               userId=response.data[0].id;
-               var url="dashboard.html?userId="+userId;
+              // var url="dashboard.html?userId="+userId;
+              var url="dashboard.html";
                window.location.href = url;
             //formReset();  
 

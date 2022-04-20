@@ -24,9 +24,7 @@
         td {
             border: 1px solid black;
         }
-        .movies{
-           
-        }
+    
 
         .btn {
             padding: 10px;
@@ -39,10 +37,11 @@
     </style>
 
     <script>
-        const params = new Proxy(new URLSearchParams(window.location.search), {
+       /* const params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
         });
-        const userId = params.userId;
+        const userId = params.userId;*/
+        const userId = localStorage.getItem("userId");
         //alert(userId)
         const email = localStorage.getItem("email");
         const token = localStorage.getItem("token");

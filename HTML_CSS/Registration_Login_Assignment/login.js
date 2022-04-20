@@ -52,12 +52,13 @@ function getDataFromDb(event) {
              result= JSON.parse(this.responseText);
              console.log(result.token)
              console.log(result.data[0].id)
+             userId=result.data[0].id;
             localStorage.setItem('email',emailInput.value);
             localStorage.setItem('token', result.token)
+            localStorage.setItem('userId', userId)
             console.log(localStorage.getItem("email"));
                 alert("!!!!Login success from DB!!!!")
-                userId=result.data[0].id;
-                var url="dashboard.html?userId="+userId;
+                var url="dashboard.html";
                 window.location.href = url;
          }
          if (this.readyState == 4 && this.status == 401) {
