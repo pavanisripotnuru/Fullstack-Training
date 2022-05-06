@@ -1,8 +1,10 @@
 todos = [
 
-"Meeting at 10:00am",
+"Meeting",
 
-"Lunch at 1:30pm",
+"Lunch",
+
+"Standup",
 
 ]
 
